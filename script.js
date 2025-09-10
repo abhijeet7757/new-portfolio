@@ -69,20 +69,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!commentBox || !newCommentWrap || !postBtn || !commentInput) return;
 
-  
   imageInput?.addEventListener("change", (e) => {
     const file = e.target.files && e.target.files[0];
     tempImageURL = file ? URL.createObjectURL(file) : null;
   });
 
-  
   function addComment() {
     const text = (commentInput.value || "").trim();
     if (!text) return;
 
     const avatar = tempImageURL || DEFAULT_AVATAR;
 
-    
     const newComment = document.createElement("div");
     newComment.className = "comment";
     newComment.innerHTML = `
@@ -96,40 +93,37 @@ document.addEventListener("DOMContentLoaded", () => {
       </div>
     `;
 
-    
     commentBox.insertBefore(newComment, newCommentWrap);
 
-    
     commentInput.value = "";
     if (imageInput) imageInput.value = "";
     tempImageURL = null;
 
-    
     newComment.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 
-  
   function escapeHtml(str) {
-    return str.replace(/[&<>"']/g, (m) => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#039;"
-    }[m]));
+    return str.replace(
+      /[&<>"']/g,
+      (m) =>
+        ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#039;",
+        }[m])
+    );
   }
 
-  
   postBtn.addEventListener("click", addComment);
 
-  
   commentInput.addEventListener("keydown", (e) => {
     if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
       addComment();
     }
   });
 
-  
   commentBox.addEventListener("click", (e) => {
     const target = e.target;
 
@@ -146,7 +140,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const p = wrap?.querySelector("p");
       if (!p) return;
 
-      
       const currentText = (p.innerText || "").replace(/^You:\s*/, "").trim();
       const newText = prompt("Edit your comment:", currentText);
       if (newText !== null) {
@@ -157,8 +150,8 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-
 /* ========== FILTER TABS SECTION ========== */
+
 document.addEventListener("DOMContentLoaded", () => {
   const tabs = document.querySelectorAll("#tabsWrap .tab");
   const cards = document.querySelectorAll("#cardsGrid .card");
@@ -179,14 +172,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function setActiveTab(tabEl) {
-    const wasActive = tabEl.classList.contains("active");
     tabs.forEach((t) => t.classList.remove("active"));
-    if (wasActive) {
-      showFilter("none");
-    } else {
-      tabEl.classList.add("active");
-      showFilter(tabEl.dataset.filter || "all");
-    }
+    tabEl.classList.add("active");
+    showFilter(tabEl.dataset.filter || "all");
   }
 
   tabs.forEach((tab) => {
@@ -212,17 +200,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  document.addEventListener("click", (e) => {
-    if (!e.target.closest("#tabsWrap") && !e.target.closest("#cardsGrid")) {
-      tabs.forEach((t) => t.classList.remove("active"));
-      cards.forEach((c) => {
-        c.classList.add("hidden");
-        c.style.opacity = "0";
-      });
-    }
-  });
-
-  showFilter("all");
+  const defaultTab = document.querySelector('[data-filter="Programming"]');
+  if (defaultTab) setActiveTab(defaultTab);
 });
 
 /* ========== FAQ SECTION ========== */
@@ -235,4 +214,24 @@ faqItems.forEach((item) => {
     });
     item.classList.toggle("active");
   });
+});
+
+// hamburger menu
+
+const menuIcon = document.querySelector(".hamburger");
+const cancelIcon = document.querySelector(".cancle");
+const navMenu = document.querySelector("header nav"); 
+
+// Menu open
+menuIcon.addEventListener("click", () => {
+  navMenu.classList.add("active");
+  menuIcon.style.display = "none";
+  cancelIcon.style.display = "block";
+});
+
+// Menu close
+cancelIcon.addEventListener("click", () => {
+  navMenu.classList.remove("active");
+  cancelIcon.style.display = "none";
+  menuIcon.style.display = "block";
 });
