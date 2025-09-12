@@ -220,7 +220,7 @@ faqItems.forEach((item) => {
 
 const menuIcon = document.querySelector(".hamburger");
 const cancelIcon = document.querySelector(".cancle");
-const navMenu = document.querySelector("header nav"); 
+const navMenu = document.querySelector("header nav");
 
 // Menu open
 menuIcon.addEventListener("click", () => {
@@ -234,4 +234,29 @@ cancelIcon.addEventListener("click", () => {
   navMenu.classList.remove("active");
   cancelIcon.style.display = "none";
   menuIcon.style.display = "block";
+});
+
+function closeMenu() {
+  navMenu.classList.remove("active");
+  cancelIcon.style.display = "none";
+  menuIcon.style.display = "block";
+}
+
+// Document
+document.addEventListener("click", (e) => {
+  if (
+    navMenu.classList.contains("active") &&
+    !navMenu.contains(e.target) &&
+    !menuIcon.contains(e.target) &&
+    !cancelIcon.contains(e.target)
+  ) {
+    closeMenu();
+  }
+});
+
+// Scroll event
+window.addEventListener("scroll", () => {
+  if (navMenu.classList.contains("active")) {
+    closeMenu();
+  }
 });
